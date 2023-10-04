@@ -4,6 +4,6 @@ describe("Database Connectivity", () => {
   test("should connect to the database", async () => {
     const response = await checkConnection();
     console.log("response: ", response);
-    expect(response.status).toBe(200);
+    expect(response.statusCode).toBe(200);
   });
 });
