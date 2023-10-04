@@ -1,12 +1,8 @@
 name: webapp
 
 on:
-  push:
-    branches: [ Assignment2 ]
-
-# on:
-#   pull_request:
-#     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   db-integration-test:
