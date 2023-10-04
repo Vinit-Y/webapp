@@ -1,13 +1,16 @@
-import databaseRouter from "./database-router.js";
+import assignmentRouter from "./assignment-router.js";
+import { setResponse } from "../utils/response.js";
+import { authenticate } from "../utils/authenticate.js";
+
+import connectionRouter from "./connection-router.js";
 
 export default (app) => {
-  app.use("/healthz", databaseRouter);
+  app.use("/healthz", connectionRouter);
+  
+  app.use("/v1/assignments", authenticate, assignmentRouter);
 
-app.use((req, res) => {
-  res
-    .status(405)
-    .header("cache-control", "no-cache, no-store, must-revalidate")
-    .header("pragma", "no-cache")
-    .json();
-}) 
+  app.use((req, res) => {
+    setResponse(res, 404);
+  });
+
 };
