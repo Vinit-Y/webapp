@@ -4,10 +4,10 @@ import { setResponse } from "../utils/response.js";
 
 const router = express.Router();
 
-router.get("/", connectionController.checkConnection);
-
-router.all((req, res) => {
-  setResponse(res, 405);
-});
-
+router
+  .route("/")
+  .get(connectionController.checkConnection)
+  .all((req, res) => {
+    setResponse(res, 405);
+  });
 export default router;
