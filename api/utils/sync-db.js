@@ -8,10 +8,11 @@ Account.hasMany(Assignment);
 
 export const syncDatabase = async () => {
   try {
-    await databaseConnection.sync({ force: false });
+    await databaseConnection.sync({ alter: true });
 
     await loadAccountsFromCSV();
   } catch (error) {
     console.log(error);
+    console.log("Failed to sync database. Error: ", error);
   }
 };
