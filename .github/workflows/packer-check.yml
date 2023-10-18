@@ -48,7 +48,7 @@ jobs:
 
       - name: Packer Validate 
         run: |
-           if ! packer validate -evaluate-datasources --var-file=./packer/aws-debian.pkrvars.hcl ./packer/aws-debian.pkr.hcl; then
+           if ! packer validate -evaluate-datasources --var-file=./packer/variables.pkrvars.hcl ./packer/aws-debian.pkr.hcl; then
              echo "Packer validate failed"
              exit 1
            fi
