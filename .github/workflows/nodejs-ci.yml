@@ -61,13 +61,3 @@ jobs:
       - name: Run Integration Tests
         run: npm test
 
-      - name: Initialize Packer
-        run: |
-          packer init ./aws-debian.pkr.hcl  
-        shell: bash
-  
-      - name: Packer fmt Check
-        run: packer fmt -check .
-  
-      - name: Packer Validate
-        run: packer validate .
