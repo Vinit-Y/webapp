@@ -1,0 +1,72 @@
+name: Build and Share Packer AMI
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  build-and-share-ami:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Run Integration Test
+      run: npm test
+        
+      continue-on-error: true
+
+    - name: Build Application Artifact
+      run: npm install
+           
+        # Add commands to build your application artifact (e.g., war, jar, zip) here
+      continue-on-error: true
+
+    - name: Archive Application Artifact
+      run: zip -r webappGit.zip ./
+        # Archive the application artifact (e.g., using `zip` or `tar`)
+        # Store it in a temporary location
+      continue-on-error: true
+
+    - name: Set up AWS CLI
+      run:
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region us-east-1  # Update with your desired region
+      continue-on-error: true
+
+    - name: Build Packer AMI
+      uses: hashicorp/setup-packer  # Use the official Packer action
+    
+
+    - name: Initialize Packer
+      run: |
+        packer init ./aws-debian.pkr.hcl  
+      shell: bash
+
+    - name: Packer fmt Check
+      run: packer fmt -check .
+
+    - name: Packer Validate
+      run: packer validate .
+
+    - name: Build AMI
+      run:
+       packer build aws-debian.pkr.hcl
+      continue-on-error: true
+  
+    - name: Share AMI with DEMO Account
+      run: |
+        aws ec2 modify-image-attribute --image-id "$AMI_ID" --launch-permission "Add=[{UserId=965578530674}]"
+      continue-on-error: true
+    
+
+  # Add more jobs or steps as needed for your workflow
+
+# Define environment variables or secrets, e.g., AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
