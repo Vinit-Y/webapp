@@ -1,0 +1,56 @@
+# name: AMI Builder
+
+# on:
+#   pull_request:
+#     types: [closed]
+#     branches: [main]
+
+# jobs:
+#   build-and-share-ami:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Check out repository
+#       uses: actions/checkout@v2
+
+#     - name: Run Integration Test
+#       run: npm test
+        
+#       continue-on-error: true
+
+#     - name: Archive Application Artifact
+#       run: zip -r webapp.zip ./
+#         # Archive the application artifact (e.g., using `zip` or `tar`)
+#         # Store it in a temporary location
+#       continue-on-error: true
+    
+#     - name: check the current
+#       run: ls -la
+
+#     - name: Set up AWS CLI
+#       run:
+#         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws configure set default.region us-east-1  # Update with your desired region
+#       continue-on-error: true
+
+#     - name: Build Packer AMI
+#       uses: hashicorp/setup-packer  # Use the official Packer action
+#       with:
+#         version: 1.7.2  # Update with the latest Packer version
+
+#     - name: Build AMI
+#       run:
+#        packer build ./packer/aws-debian.pkr.hcl
+#       continue-on-error: true
+  
+#     - name: Share AMI with DEMO Account
+#       run: |
+#         aws ec2 modify-image-attribute --image-id "$AMI_ID" --launch-permission "Add=[{UserId=965578530674}]"
+#       continue-on-error: true
+    
+# # Define environment variables or secrets, e.g., AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+# env:
+#   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
