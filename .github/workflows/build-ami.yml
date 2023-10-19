@@ -1,56 +1,97 @@
-# name: AMI Builder
+name: Build AMI
 
-# on:
-#   pull_request:
-#     types: [closed]
-#     branches: [main]
+on:
+  pull_request:
+    branches: 
+      - main
+    types: [closed]
 
-# jobs:
-#   build-and-share-ami:
-#     runs-on: ubuntu-latest
+jobs:
+  build-ami:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Check out repository
-#       uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#     - name: Run Integration Test
-#       run: npm test
+      - name: Set Environment Variables
+        env:
+          PORT: ${{ secrets.PORT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DIALECT: ${{ secrets.DB_DIALECT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+        run: |
+          echo "PORT=$PORT" >> .env
+          echo "DB_HOST=$DB_HOST" >> .env
+          echo "DB_PORT=$DB_PORT" >> .env
+          echo "DB_USER=$DB_USER" >> .env
+          echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+          echo "DB_DIALECT=$DB_DIALECT" >> .env
+          echo "DB_NAME=$DB_NAME" >> .env
         
-#       continue-on-error: true
+      - name: Compress webapp
+        run: zip -r webapp.zip .
 
-#     - name: Archive Application Artifact
-#       run: zip -r webapp.zip ./
-#         # Archive the application artifact (e.g., using `zip` or `tar`)
-#         # Store it in a temporary location
-#       continue-on-error: true
-    
-#     - name: check the current
-#       run: ls -la
+      - name: Check MySQL Running Status
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -h 127.0.0.1 --port 3306 -u root -p'${{ secrets.ROOT_DB_PASS }}' -e "CREATE USER '${{ secrets.DB_USER }}'@'localhost' IDENTIFIED BY '${{ secrets.DB_PASSWORD }}';"  
+          mysql -h 127.0.0.1 --port 3306 -u root -p'${{ secrets.ROOT_DB_PASS }}' -e "GRANT ALL ON *.* TO '${{ secrets.DB_USER }}'@'localhost';"
+          mysql -h 127.0.0.1 --port 3306 -u root -p'${{ secrets.ROOT_DB_PASS }}' -e "FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 --port 3306 -u root -p'${{ secrets.ROOT_DB_PASS }}' -e "CREATE DATABASE ${{ secrets.DB_NAME }};"
 
-#     - name: Set up AWS CLI
-#       run:
-#         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws configure set default.region us-east-1  # Update with your desired region
-#       continue-on-error: true
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-#     - name: Build Packer AMI
-#       uses: hashicorp/setup-packer  # Use the official Packer action
-#       with:
-#         version: 1.7.2  # Update with the latest Packer version
+      - name: Check Versions and Install Dependencies
+        run: |
+          pwd
+          ls -al
+          node -v
+          npm -v
+          npm install
+          ls -al
 
-#     - name: Build AMI
-#       run:
-#        packer build ./packer/aws-debian.pkr.hcl
-#       continue-on-error: true
-  
-#     - name: Share AMI with DEMO Account
-#       run: |
-#         aws ec2 modify-image-attribute --image-id "$AMI_ID" --launch-permission "Add=[{UserId=965578530674}]"
-#       continue-on-error: true
-    
-# # Define environment variables or secrets, e.g., AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-# env:
-#   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  
+      - name: Run Integration Tests
+        run: npm test
+
+      - name: Set Variables for Packer
+        run: |
+          touch ./packer/variables.pkrvars.hcl
+          echo aws_region=\"${{ vars.AWS_REGION }}\" >> ./packer/variables.pkrvars.hcl
+          echo source_ami=\"${{ vars.SOURCE_AMI }}\" >> ./packer/variables.pkrvars.hcl
+          echo ssh_username=\"${{ vars.SSH_USERNAME }}\" >> ./packer/variables.pkrvars.hcl
+          echo ami_name_prefix=\"${{ vars.AMI_NAME_PREFIX }}\" >> ./packer/variables.pkrvars.hcl
+          echo instance_type=\"${{ vars.INSTANCE_TYPE }}\" >> ./packer/variables.pkrvars.hcl
+          echo custom_ami_description=\"${{ vars.CUSTOM_AMI_DESCRIPTION }}\" >> ./packer/variables.pkrvars.hcl
+          echo ami_accessible_regions=\"${{ vars.AMI_ACCESSIBLE_REGIONS }}\" >> ./packer/variables.pkrvars.hcl
+          echo device_name=\"${{ vars.DEVICE_NAME }}\" >> ./packer/variables.pkrvars.hcl
+          echo volume_size=\"${{ vars.VOLUME_SIZE }}\" >> ./packer/variables.pkrvars.hcl
+          echo volume_type=\"${{ vars.VOLUME_TYPE }}\" >> ./packer/variables.pkrvars.hcl
+          echo profile=\"${{ vars.PROFILE }}\" >> ./packer/variables.pkrvars.hcl
+          echo file_source=\"${{ vars.FILE_SOURCE }}\" >> ./packer/variables.pkrvars.hcl
+          echo file_destination=\"${{ vars.FILE_DESTINATION }}\" >> ./packer/variables.pkrvars.hcl
+          echo shell_script_location=\"${{ vars.SHELL_SCRIPT_LOCATION }}\" >> ./packer/variables.pkrvars.hcl
+          echo default_vpc_id=\"${{ secrets.DEFAULT_VPC_ID }}\" >> ./packer/variables.pkrvars.hcl
+          echo ami_accessible_users=\"${{ secrets.AMI_ACCESSIBLE_USERS }}\" >> ./packer/variables.pkrvars.hcl
+
+          cat ./packer/variables.pkrvars.hcl
+
+      - name: Install Packer
+        run: |  
+          pwd
+          ls -la
+          packer init ./packer/ami.pkr.hcl 
+        
+      - name: Build AMI
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        run: |
+          packer build --var-file=./packer/variables.pkrvars.hcl ./packer/ami.pkr.hcl
