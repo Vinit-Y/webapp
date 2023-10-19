@@ -98,7 +98,7 @@ source "amazon-ebs" "my-ami" {
   instance_type   = "${var.instance_type}"
   source_ami      = "${var.source_ami}"
   ssh_username    = "${var.ssh_username}"
-  vpc_id          = "${var.default_vpc_id}"
+  // vpc_id          = "${var.default_vpc_id}"
 
   aws_polling {
     delay_seconds = 120

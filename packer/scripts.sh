@@ -19,7 +19,9 @@ echo "show databases;" | sudo mariadb
 echo "exit" | sudo mariadb
 sudo systemctl status mariadb
 sudo mysqladmin version
-unzip webapp.zip
+sudo mkdir webapp
+sudo unzip webapp.zip -d webapp
+sudo apt-get remove -y git
 echo "------------Unziped File Successfully--------------"
 pwd
 ls -al
@@ -35,6 +37,7 @@ pwd
 # DB_DIALECT=mysql
 # DB_NAME=mydb
 # EOL
+cat .env
 sudo npm install
 
 
