@@ -34,7 +34,7 @@ jobs:
           echo "DB_NAME=$DB_NAME" >> .env
         
       - name: Compress webapp
-        run: zip -r webapp.zip /opt/
+        run: zip -r webapp.zip home/opt/
 
       - name: Check MySQL Running Status
         run: |
