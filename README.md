@@ -1,4 +1,3 @@
-
 A Node.js application developed for CSYE 6225
 
 ## Prerequisites
