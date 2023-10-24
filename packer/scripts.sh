@@ -21,23 +21,16 @@ sudo systemctl status mariadb
 sudo mysqladmin version
 sudo mkdir webapp
 sudo unzip webapp.zip -d webapp
-sudo apt-get remove -y git
 echo "------------Unziped File Successfully--------------"
+sudo apt-get remove -y git
 pwd
 ls -al
 cd webapp/ || exit
 pwd
-# touch .env
-# cat<<EOL> .env
-# PORT=5000
-# DB_HOST=127.0.0.1
-# DB_PORT=3306
-# DB_USER=admin
-# DB_PASSWORD=password
-# DB_DIALECT=mysql
-# DB_NAME=mydb
-# EOL
-cat .env
-sudo npm install
+ls -al
+sudo npm install  -y
+ls -al
+sudo cat .env
+
 
 

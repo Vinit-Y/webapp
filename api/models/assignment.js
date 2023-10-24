@@ -20,6 +20,7 @@ const Assignment = databaseConnection.define(
       validate: {
         min: 1,
         max: 100,
+        isInt: true,
       },
     },
     num_of_attempts: {
@@ -28,6 +29,7 @@ const Assignment = databaseConnection.define(
       validate: {
         min: 1,
         max: 100,
+        isInt: true,
       },
     },
     deadline: {
