@@ -19,13 +19,13 @@ sudo apt upgrade -y
 # echo "exit" | sudo mariadb
 # sudo systemctl status mariadb
 # sudo mysqladmin version
-sudo mkdir webapp
-sudo unzip webapp.zip -d webapp
+# sudo mkdir webapp
+sudo unzip webapp.zip -d /opt
 echo "------------Unziped File Successfully--------------"
 sudo apt-get remove -y git
 pwd
 ls -al
-cd webapp/ || exit
+cd opt/ || exit
 pwd
 ls -al
 # sudo npm install  -y
