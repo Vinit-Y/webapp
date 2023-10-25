@@ -74,7 +74,17 @@ variable "file_source" {
 
 variable "file_destination" {
   type    = string
-  default = "~/webapp.zip"
+  default = "/tmp/webapp.zip"
+}
+
+variable "file_source_boot" {
+  type    = string
+  default = "./packer/systemd-boot.service"
+}
+
+variable "file_destination_boot" {
+  type    = string
+  default = "/tmp/systemd-boot.service"
 }
 
 variable "shell_script_location" {
@@ -117,14 +127,19 @@ source "amazon-ebs" "my-ami" {
 build {
   sources = ["source.amazon-ebs.my-ami"]
 
+  provisioner "shell" {
+    scripts      = ["${var.shell_script_location}"]
+    pause_before = "10s"
+    timeout      = "10s"
+  }
+
   provisioner "file" {
     source      = "${var.file_source}"
     destination = "${var.file_destination}"
   }
 
-  provisioner "shell" {
-    scripts      = ["${var.shell_script_location}"]
-    pause_before = "10s"
-    timeout      = "10s"
+  provisioner "file" {
+    source      = "${var.file_source_boot}"
+    destination = "${var.file_destination_boot}"
   }
 }

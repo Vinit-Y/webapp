@@ -35,6 +35,9 @@ jobs:
 
           cat ./packer/variables.pkrvars.hcl
 
+      - name: Compress webapp
+        run: zip -r webapp.zip .
+        
       - name: Install Packer
         run: |
           packer init ./packer/aws-debian.pkr.hcl

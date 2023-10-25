@@ -19,18 +19,33 @@ sudo apt upgrade -y
 # echo "exit" | sudo mariadb
 # sudo systemctl status mariadb
 # sudo mysqladmin version
-# sudo mkdir webapp
-sudo unzip webapp.zip -d /opt
+pwd
+ls -al
+sudo cp /tmp/webapp.zip /opt/webapp.zip
+cd /opt/ || exit
+sudo mkdir webapp
+sudo unzip webapp.zip -d webapp
 echo "------------Unziped File Successfully--------------"
 sudo apt-get remove -y git
 pwd
 ls -al
-cd opt/ || exit
+cd webapp/ || exit
 pwd
 ls -al
-# sudo npm install  -y
-# ls -al
-# sudo cat .env
+sudo npm install
+ls -al
+
+sudo groupadd csye6225
+sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
+
+sudo cp /tmp/systemd-boot.service /lib/systemd/system/systemd-boot.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable systemd-boot.service
+sudo systemctl start systemd-boot.service
+sudo systemctl status systemd-boot.service
+
+
 
 
 
