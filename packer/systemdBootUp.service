@@ -1,5 +1,5 @@
 [Unit]
-Description=My Webapp Cloud Application
+Description=webapp
 ConditionPathExists=/opt/webapp/server.js
 After=network.target
 

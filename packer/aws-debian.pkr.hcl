@@ -79,12 +79,12 @@ variable "file_destination" {
 
 variable "file_source_boot" {
   type    = string
-  default = "./packer/systemd-boot.service"
+  default = "./packer/systemdBootUp.service"
 }
 
 variable "file_destination_boot" {
   type    = string
-  default = "/tmp/systemd-boot.service"
+  default = "/tmp/systemdBootUp.service"
 }
 
 variable "shell_script_location" {
@@ -127,12 +127,6 @@ source "amazon-ebs" "my-ami" {
 build {
   sources = ["source.amazon-ebs.my-ami"]
 
-  provisioner "shell" {
-    scripts      = ["${var.shell_script_location}"]
-    pause_before = "10s"
-    timeout      = "10s"
-  }
-
   provisioner "file" {
     source      = "${var.file_source}"
     destination = "${var.file_destination}"
@@ -141,5 +135,11 @@ build {
   provisioner "file" {
     source      = "${var.file_source_boot}"
     destination = "${var.file_destination_boot}"
+  }
+
+  provisioner "shell" {
+    scripts      = ["${var.shell_script_location}"]
+    pause_before = "10s"
+    timeout      = "10s"
   }
 }

@@ -14,7 +14,8 @@ npm -v
 
 pwd
 ls -al
-
+cd /tmp
+sudo ls -al
 sudo cp /tmp/webapp.zip /opt/webapp.zip
 
 cd /opt || exit
@@ -35,12 +36,12 @@ ls -al
 sudo groupadd csye6225
 sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
 
-sudo cp /tmp/systemd-boot.service /lib/systemd/system/systemd-boot.service
+sudo cp /tmp/systemdBootUp.service /lib/systemd/system/systemdBootUp.service
 
 sudo systemctl daemon-reload
-sudo systemctl enable systemd-boot.service
-sudo systemctl start systemd-boot.service
-sudo systemctl status systemd-boot.service
+sudo systemctl enable systemdBootUp.service
+sudo systemctl start systemdBootUp.service
+sudo systemctl status systemdBootUp.service
 
 
 
