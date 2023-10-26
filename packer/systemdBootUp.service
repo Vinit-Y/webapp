@@ -1,5 +1,5 @@
 [Unit]
-Description=webapp
+Description=my-webapp-using-systemd
 ConditionPathExists=/opt/webapp/server.js
 After=network.target
 
