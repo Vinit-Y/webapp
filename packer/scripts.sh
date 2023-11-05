@@ -57,9 +57,6 @@ npm -v
 sudo apt-get install nodejs -y
 node -v
 
-# Change ownership of the application directory
-sudo chown -R csye6225:csye6225 /opt/webapp
-
 # Create a dedicated non-privileged user
 sudo useradd -s /usr/sbin/nologin -g csye6225 -d /opt/csye6225 -m csye6225
 
@@ -82,6 +79,9 @@ sudo apt-get remove -y git
 
 # Copy the systemd service file
 sudo cp /tmp/systemdBootUp.service /lib/systemd/system/systemdBootUp.service
+
+# Change ownership of the application directory
+sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Reload, enable, and start the systemd service
 sudo systemctl daemon-reload
