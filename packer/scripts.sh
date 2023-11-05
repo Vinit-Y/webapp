@@ -57,6 +57,7 @@ npm -v
 sudo apt-get install nodejs -y
 node -v
 
+sudo groupadd csye6225
 # Create a dedicated non-privileged user
 sudo useradd -s /usr/sbin/nologin -g csye6225 -d /opt/csye6225 -m csye6225
 
