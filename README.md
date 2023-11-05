@@ -5,8 +5,6 @@ A Node.js application developed for CSYE 6225
 - Node.js
 - GitHub account with GitHub Team plan access
 - Debian 12 VM (for testing and demo)
-
-- 
 - Basic authentication token
 
 ## Setup and Usage
