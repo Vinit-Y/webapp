@@ -26,16 +26,16 @@ const Account = databaseConnection.define(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: { msg: "Must be a valid email address" },
+        isEmail: { msg: "Please input a valid email address format." },
       },
     },
   },
-{
-  createdAt: "account_created",
-  updatedAt: "account_updated",
-});
-
-
-
+  {
+    timestamps: {
+      createdAt: "account_creation_date",
+      updatedAt: "account_last_updated",
+    },
+  }
+);
 
 export default Account;
