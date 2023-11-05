@@ -2,6 +2,7 @@ import * as assignmentService from "./../services/assignment-service.js";
 import { setResponse } from "../utils/response.js";
 import { Sequelize } from "sequelize";
 
+// Get all assignments
 export const getAll = async (request, response) => {
   try {
     const assignments = await assignmentService.getAllAssignments();
@@ -11,6 +12,7 @@ export const getAll = async (request, response) => {
   }
 };
 
+// Create a new assignment
 export const post = async (request, response) => {
   try {
     const assignment = await assignmentService.createAssignment(
@@ -29,6 +31,7 @@ export const post = async (request, response) => {
   }
 };
 
+// Get an assignment by its ID
 export const getById = async (request, response) => {
   try {
     const assignment = await assignmentService.getAssignment(request.params.id);
@@ -42,6 +45,7 @@ export const getById = async (request, response) => {
   }
 };
 
+// Update an assignment by its ID
 export const updateById = async (request, response) => {
   try {
     const { status } = await assignmentService.updateAssignment(
@@ -61,6 +65,7 @@ export const updateById = async (request, response) => {
   }
 };
 
+// Delete an assignment by its ID
 export const deleteById = async (request, response) => {
   try {
     const { status } = await assignmentService.deleteAssignment(

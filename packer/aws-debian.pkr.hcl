@@ -93,11 +93,6 @@ variable "shell_script_location" {
 }
 
 
-variable "default_vpc_id" {
-  type    = string
-  default = "vpc-0fde750c0554133f1"
-}
-
 source "amazon-ebs" "my-ami" {
   region          = "${var.aws_region}"
   profile         = "${var.profile}"
@@ -108,7 +103,6 @@ source "amazon-ebs" "my-ami" {
   instance_type   = "${var.instance_type}"
   source_ami      = "${var.source_ami}"
   ssh_username    = "${var.ssh_username}"
-  // vpc_id          = "${var.default_vpc_id}"
 
   aws_polling {
     delay_seconds = 120
