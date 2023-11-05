@@ -9,12 +9,12 @@ packer {
 
 variable "aws_region" {
   type    = string
-  default = "us-east-1"
+  default = "us-east-2"
 }
 
 variable "source_ami" {
   type    = string
-  default = "ami-06db4d78cb1d3bbf9" # Debian 12 (HVM), SSD Volume Type
+  default = "ami-0ec3d9efceafb89e0" # Debian 12 (HVM), SSD Volume Type
 }
 
 variable "ssh_username" {
