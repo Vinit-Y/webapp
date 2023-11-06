@@ -13,8 +13,18 @@ npm -v
 sudo apt-get install nodejs -y
 node -v
 
+# Install the CloudWatch agent
+sudo wget https://amazoncloudwatch-agent.s3.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+
+# Copy the CloudWatch agent configuration file
+sudo cp /tmp/cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+
+# Start the CloudWatch agent on boot
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json --enable
+
+# Create a dedicated non-privileged user & group
 sudo groupadd csye6225
-# Create a dedicated non-privileged user
 sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
 
 # Copy the application files
@@ -36,9 +46,11 @@ sudo apt-get remove -y git
 
 # Change ownership of the application directory
 sudo chown -R csye6225:csye6225 /opt/csye6225/webapp
+ls -al
 
 # Change permissions of the application directory
 sudo chmod -R 750 /opt/csye6225/webapp
+ls -al
 
 # Copy the systemd service file
 sudo cp /tmp/systemdBootUp.service /lib/systemd/system/systemdBootUp.service
