@@ -1,14 +1,14 @@
 [Unit]
 Description=my-webapp-using-systemd
-ConditionPathExists=/opt/webapp/server.js
+ConditionPathExists=/opt/csye6225/webapp/server.js
 After=network.target
 
 [Service]
 Type=simple
 User=csye6225
 Group=csye6225
-WorkingDirectory=/opt/webapp
-ExecStart=/usr/bin/node /opt/webapp/server.js
+WorkingDirectory=/opt/csye6225/webapp
+ExecStart=/usr/bin/node /opt/csye6225/webapp/server.js
 Restart=always
 RestartSec=10
 
