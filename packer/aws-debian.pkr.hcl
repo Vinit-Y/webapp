@@ -14,7 +14,7 @@ variable "aws_region" {
 
 variable "source_ami" {
   type    = string
-  default = "ami-0f58aa386a2280f35" # Debian 12 (HVM), SSD Volume Type
+  default = "ami-058bd2d568351da34" # Debian 12 (HVM), SSD Volume Type
 }
 
 variable "ssh_username" {

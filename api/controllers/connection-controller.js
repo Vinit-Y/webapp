@@ -17,11 +17,8 @@ export const checkConnection = async (req, res) => {
     case 200:
       setResponse(res, 200); // Success - OK
       break;
-    case -4078:
-      setResponse(res, 503); // Service Unavailable
-      break;
     default:
-      setResponse(res, 500); // Internal Server Error
+      setResponse(res, 503); // Service Unavailable
       break;
   }
 };
