@@ -87,6 +87,16 @@ variable "file_destination_boot" {
   default = "/tmp/systemdBootUp.service"
 }
 
+variable "file_source_cloudwatch" {
+  type    = string
+  default = "./packer/cloudwatch-config.json"
+}
+
+variable "file_destination_cloudwatch" {
+  type    = string
+  default = "/tmp/cloudwatch-config.json"
+}
+
 variable "shell_script_location" {
   type    = string
   default = "./packer/scripts.sh"
@@ -129,6 +139,11 @@ build {
   provisioner "file" {
     source      = "${var.file_source_boot}"
     destination = "${var.file_destination_boot}"
+  }
+
+  provisioner "file" {
+    source      = "${var.file_source_cloudwatch}"
+    destination = "${var.file_destination_cloudwatch}"
   }
 
   provisioner "shell" {

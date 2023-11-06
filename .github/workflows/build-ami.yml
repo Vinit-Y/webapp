@@ -52,11 +52,10 @@ jobs:
       - name: Check Versions and Install Dependencies
         run: |
           pwd
-          ls -al
           node -v
           npm -v
           npm install
-          ls -al
+         
 
       - name: Run Integration Tests
         run: npm test
@@ -79,6 +78,8 @@ jobs:
           echo file_destination=\"${{ vars.FILE_DESTINATION }}\" >> ./packer/variables.pkrvars.hcl
           echo file_source_boot=\"${{ vars.FILE_SOURCE_BOOT }}\" >> ./packer/variables.pkrvars.hcl
           echo file_destination_boot=\"${{ vars.FILE_DESTINATION_BOOT }}\" >> ./packer/variables.pkrvars.hcl
+          echo file_source_cloudwatch=\"${{ vars.FILE_SOURCE_CLOUDWATCH }}\" >> ./packer/variables.pkrvars.hcl
+          echo file_destination_cloudwatch=\"${{ vars.FILE_DESTINATION_CLOUDWATCH }}\" >> ./packer/variables.pkrvars.hcl
           echo shell_script_location=\"${{ vars.SHELL_SCRIPT_LOCATION }}\" >> ./packer/variables.pkrvars.hcl
           echo default_vpc_id=\"${{ secrets.DEFAULT_VPC_ID }}\" >> ./packer/variables.pkrvars.hcl
           echo ami_accessible_users=\"${{ secrets.AMI_ACCESSIBLE_USERS }}\" >> ./packer/variables.pkrvars.hcl
