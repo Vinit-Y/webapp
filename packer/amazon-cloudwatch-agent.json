@@ -1,7 +1,7 @@
 {
     "agent": {
       "metrics_collection_interval": 10,
-      "logfile": "/var/log/amazon-cloudwatch-agent.log"
+      "logfile": "/var/logs/amazon-cloudwatch-agent.log"
     },
     "logs": {
       "logs_collected": {
@@ -24,7 +24,7 @@
     "metrics": {
       "metrics_collected": {
         "statsd": {
-          "service_address": "0.0.0.0:8125",
+          "service_address": ":8125",
           "metrics_collection_interval": 15,
           "metrics_aggregation_interval": 300
         }

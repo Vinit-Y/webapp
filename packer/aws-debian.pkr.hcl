@@ -89,12 +89,12 @@ variable "file_destination_boot" {
 
 variable "file_source_cloudwatch" {
   type    = string
-  default = "./packer/cloudwatch-config.json"
+  default = "./packer/amazon-cloudwatch-agent.json"
 }
 
 variable "file_destination_cloudwatch" {
   type    = string
-  default = "/tmp/cloudwatch-config.json"
+  default = "/tmp/amazon-cloudwatch-agent.json"
 }
 
 variable "shell_script_location" {
