@@ -19,7 +19,16 @@ sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 
 # Create a dedicated non-privileged user & group
 sudo groupadd csye6225
+sudo groupadd_status=$?
+
 sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
+sudo useradd_status=$?
+
+if [ $groupadd_status -eq 0 ] && [ $useradd_status -eq 0 ]; then
+  echo "Commands executed successfully."
+else
+  echo "One or more commands failed."
+fi
 
 # Copy the application files
 sudo cp /tmp/webapp.zip /opt/csye6225/webapp.zip
@@ -43,7 +52,7 @@ sudo chown -R csye6225:csye6225 /opt/csye6225/webapp
 ls -al
 
 # Change permissions of the application directory
-sudo chmod -R 750 /opt/csye6225/webapp
+sudo chmod -R 755 /opt/csye6225/webapp
 ls -al
 
 # Copy the systemd service file
