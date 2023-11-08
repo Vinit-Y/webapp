@@ -1,11 +1,11 @@
 import * as assignmentService from "./../services/assignment-service.js";
 import { setResponse } from "../utils/response.js";
 import { Sequelize } from "sequelize";
-import statsD from "../utils/statsd-config.js";
+import statsd from "../utils/statsd-config.js";
 
 // Get all assignments
 export const getAll = async (request, response) => {
-  statsD.increment("assignment.getAll");
+  statsd.increment("assignment.getAll");
   try {
     const assignments = await assignmentService.getAllAssignments();
     setResponse(request, response, 200, assignments);
@@ -16,7 +16,7 @@ export const getAll = async (request, response) => {
 
 // Create a new assignment
 export const post = async (request, response) => {
-statsD.increment("assignment.post");
+statsd.increment("assignment.post");
   try {
     const assignment = await assignmentService.createAssignment(
       request.body,
@@ -36,7 +36,7 @@ statsD.increment("assignment.post");
 
 // Get an assignment by its ID
 export const getById = async (request, response) => {
-  statsD.increment("assignment.getById");
+  statsd.increment("assignment.getById");
   try {
     const assignment = await assignmentService.getAssignment(request.params.id);
     if (assignment) {
@@ -51,7 +51,7 @@ export const getById = async (request, response) => {
 
 // Update an assignment by its ID
 export const updateById = async (request, response) => {
-  statsD.increment("assignment.updateById");
+  statsd.increment("assignment.updateById");
   try {
     const { status } = await assignmentService.updateAssignment(
       request.params.id,
@@ -72,7 +72,7 @@ export const updateById = async (request, response) => {
 
 // Delete an assignment by its ID
 export const deleteById = async (request, response) => {
-  statsD.increment("assignment.deleteById");
+  statsd.increment("assignment.deleteById");
   try {
     const { status } = await assignmentService.deleteAssignment(
       request.params.id,
