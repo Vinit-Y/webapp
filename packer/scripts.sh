@@ -17,18 +17,12 @@ node -v
 sudo wget https://amazoncloudwatch-agent.s3.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 
+# Check the status of the agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
+
 # Create a dedicated non-privileged user & group
 sudo groupadd csye6225
-sudo groupadd_status=$?
-
 sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
-sudo useradd_status=$?
-
-if [ $groupadd_status -eq 0 ] && [ $useradd_status -eq 0 ]; then
-  echo "Commands executed successfully."
-else
-  echo "One or more commands failed."
-fi
 
 # Copy the application files
 sudo cp /tmp/webapp.zip /opt/csye6225/webapp.zip
