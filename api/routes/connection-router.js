@@ -8,6 +8,6 @@ router
   .route("/")
   .get(connectionController.checkConnection)
   .all((req, res) => {
-    setResponse(res, 405);
+    setResponse(req, res, 405);
   });
 export default router;

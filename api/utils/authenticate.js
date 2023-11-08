@@ -32,3 +32,6 @@ export const authenticate = async (req, res, next) => {
   // Respond with a 401 Unauthorized status and a consistent message indicating authentication is required
   res.status(401).send("Authentication is required for this resource.");
 };
+
+
+
