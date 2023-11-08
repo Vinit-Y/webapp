@@ -16,14 +16,17 @@
   "author": "Vinit Yadav",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1490.0",
     "bcrypt": "^5.1.1",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mysql2": "^3.6.1",
+    "node-statsd": "^0.1.1",
     "nodemon": "^3.0.1",
     "sequelize": "^6.33.0",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "winston-cloudwatch": "^6.2.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",

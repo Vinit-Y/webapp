@@ -10,7 +10,7 @@ export default (app) => {
   app.use("/v1/assignments", authenticate, assignmentRouter);
 
   app.use((req, res) => {
-    setResponse(res, 405);
+    setResponse(req, res, 405);
   });
 
 };

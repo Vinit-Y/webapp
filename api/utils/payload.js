@@ -5,7 +5,7 @@ export const checkPayloadBody = (req, res, next) => {
   // Check if the request body or query parameters are present
   const check = Object.keys(req.body).length || Object.keys(req.query).length;
   if (check) {
-    setResponse(res, 400); // Bad Request
+    setResponse(req, res, 400); // Bad Request
   } else {
     return next(); // Continue to the next middleware
   }
@@ -17,7 +17,7 @@ export const checkPayLoadForPost = (compulsory, optional) => {
     // Check if query parameters are present
     const params = Object.keys(req.query).length;
     if (params) {
-      setResponse(res, 400); // Bad Request
+      setResponse(req, res, 400); // Bad Request
       return;
     }
 
@@ -29,6 +29,7 @@ export const checkPayLoadForPost = (compulsory, optional) => {
       const missing = compulsory.filter((item) => !keys.includes(item));
       if (missing.length) {
         setResponse(
+          req,
           res,
           400,
           `Missing compulsory fields: ${missing.join(", ")}`
@@ -39,7 +40,7 @@ export const checkPayLoadForPost = (compulsory, optional) => {
           (item) => !compulsory.includes(item) && !optional.includes(item)
         );
         if (extra.length) {
-          setResponse(res, 400, `Extra fields: ${extra.join(", ")}`);
+          setResponse(req, res, 400, `Extra fields: ${extra.join(", ")}`);
         } else {
           // Remove optional fields from the request body
           optional.forEach((item) => {
@@ -51,7 +52,7 @@ export const checkPayLoadForPost = (compulsory, optional) => {
         }
       }
     } else {
-      setResponse(res, 400); // Bad Request
+      setResponse(req, res, 400); // Bad Request
     }
   };
 };
@@ -62,7 +63,7 @@ export const checkPayLoadForPutRequest = (schema, optional) => {
     // Check if query parameters are present
     const params = Object.keys(req.query).length;
     if (params) {
-      setResponse(res, 400); // Bad Request
+      setResponse(req, res, 400); // Bad Request
       return;
     }
 
@@ -80,7 +81,7 @@ export const checkPayLoadForPutRequest = (schema, optional) => {
     );
 
     if (hasInvalidProperties || !hasSchemaProperties) {
-      setResponse(res, 400); // Bad Request
+      setResponse(req, res, 400); // Bad Request
     } else {
       // Remove optional fields from the request body
       for (const key of optional) {
