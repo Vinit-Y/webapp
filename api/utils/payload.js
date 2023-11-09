@@ -3,7 +3,7 @@ import { setResponse } from "./response.js";
 // Middleware to check if the request payload body is empty (for GET requests)
 export const checkPayloadBody = (req, res, next) => {
   // Check if the request body or query parameters are present
-  const check = Object.keys(req.body).length || Object.keys(req.query).length;
+  const check = Object.keys(req.body).length || Object.keys(req.query).length || req.get("Content-Length") > 0;
   if (check) {
     setResponse(req, res, 400); // Bad Request
   } else {
