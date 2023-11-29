@@ -83,3 +83,24 @@ export const deleteById = async (request, response) => {
     setResponse(request, response, 400, error);
   }
 };
+
+// Submit an assignment by its ID
+export const submitById = async (request, response) => {
+  statsd.increment("assignment.submitById");
+
+  try {
+    const { status, submission } = await assignmentService.submitAssignment(
+      request.params.id,
+      request.body.submission_url,
+      request.user
+    );
+    setResponse(request, response, status, submission);
+  } catch (error) {
+    if (error instanceof Sequelize.DatabaseError) {
+      error = error.message;
+    } else if (error instanceof Sequelize.ValidationError) {
+      error = error.errors[0].message;
+    } 
+    setResponse(request, response, 400, error);
+  }
+};

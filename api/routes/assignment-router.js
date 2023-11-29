@@ -8,9 +8,10 @@ import {
 } from "../utils/payload.js";
 
 const schema = ["name", "points", "num_of_attempts", "deadline"];
-
 const optional = ["assignment_created", "assignment_updated"];
 
+const submissionSchema = ["submission_url"];
+const submissionOptional = ["submission_date", "submission_updated" ];
 const router = express.Router();
 
 router
@@ -32,5 +33,13 @@ router
   .all((req, res) => {
     setResponse(req, res, 405);
   });
+
+router
+  .route("/:id/submission")
+  .post(checkPayLoadForPost(submissionSchema, submissionOptional), assignmentController.submitById)
+  .all((req, res) => {
+    setResponse(req, res, 405);
+  });
+
 
 export default router;
