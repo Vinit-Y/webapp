@@ -65,7 +65,6 @@ export const updateById = async (request, response) => {
     } else if (error instanceof Sequelize.ValidationError) {
       error = error.errors[0].message;
     }
-
     setResponse(request, response, 400, error);
   }
 };
