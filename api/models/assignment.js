@@ -19,7 +19,7 @@ const Assignment = databaseConnection.define(
       allowNull: false,
       validate: {
         min: 1,
-        max: 100,
+        max: 10,
         isInt: true,
       },
     },
@@ -28,7 +28,7 @@ const Assignment = databaseConnection.define(
       allowNull: false,
       validate: {
         min: 1,
-        max: 100,
+        max: 10,
         isInt: true,
       },
     },
