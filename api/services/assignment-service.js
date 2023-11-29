@@ -65,9 +65,11 @@ if (status === 200) {
   const dueDate = assignment.deadline;
 
   if (dueDate < new Date()) {
-    return { status: 400, message: "Assignment deadline has passed" };
+    console.log("Assignment deadline has passed");
+    return { status: 400, submission: "Assignment deadline has passed" };
   } else if (retries <= num_of_attempts) {
-    return { status: 400, message: "Exceeded maximum number of retries" };
+    console.log("Exceeded maximum number of retries");
+    return { status: 400, submission: "Exceeded maximum number of retries" };
   } else {
     const submission = await Submission.create({
       AssignmentId: assignmentId,
