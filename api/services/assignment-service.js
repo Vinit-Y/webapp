@@ -25,6 +25,18 @@ export const getAssignmentsByAccountId = async (id, AccountId) => {
   return status;
 };
 
+export const getAssignmentsByAccountIdWithoutOwnership = async (id) => {  
+  const assignments = await Assignment.findByPk(id);
+  let status = 200;
+
+  if (!assignments) {
+    status = 404;
+  }
+
+  return status;
+
+};
+
 export const createAssignment = async (newAssignment, AccountId) => {
   const assignment = await Assignment.create({ ...newAssignment, AccountId });
   delete assignment.dataValues.AccountId;
@@ -56,7 +68,7 @@ export const deleteAssignment = async (id, AccountId) => {
 };
 
 export const submitAssignment = async (assignmentId, submissionUrl, user) => {
-const status = await getAssignmentsByAccountId(assignmentId, user.AccountId);
+const status = await getAssignmentsByAccountIdWithoutOwnership(assignmentId);
 
 if (status === 200) {
   const num_of_attempts = await Submission.count({ where: { AssignmentId: assignmentId } });
@@ -69,7 +81,7 @@ if (status === 200) {
     return { status: 400, submission: "Assignment deadline has passed" };
   } else if (retries <= num_of_attempts) {
     console.log("Exceeded maximum number of retries");
-    return { status: 400, submission: "Exceeded maximum number of retries" };
+    return { status: 400, submission: "Exceeded maximum number of attempts" };
   } else {
     const submission = await Submission.create({
       AssignmentId: assignmentId,
