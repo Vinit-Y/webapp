@@ -92,6 +92,7 @@ if (status === 200) {
       submissionUrl: submissionUrl,
       email: user.email,
       assignmentId: assignmentId,
+      accountId: user.AccountId,
     };
 
     await publishMessageToSns(JSON.stringify(message));

@@ -101,3 +101,58 @@ jobs:
         run: |
           packer build --var-file=./packer/variables.pkrvars.hcl ./packer/aws-debian.pkr.hcl
 
+      - name: Set AMI ID as Output
+        id: ami_id
+        run: |
+          touch ami_id.txt
+          echo "::set-output name=ami_id::$(cat ami_id.txt)"
+  
+  deploy:
+    needs: build-ami
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+
+      - name: Create Launch Template Version
+        run: |
+          aws ec2 create-launch-template-version --launch-template-name new_template_version \
+          --source-version ${{ vars.LAUNCH_TEMPLATE_VERSION }} \
+          --version-description "New version with latest AMI" \
+          --launch-template-data "{\"ImageId\":\"${{ needs.build-ami.outputs.ami_id }}\"}"
+      
+      - name: Get Autoscaling Group Name
+        id: get_asg_name
+        run: |
+            ASG_NAME=$(aws ec2 describe-launch-template-versions --launch-template-name new_template_version --query 'LaunchTemplateVersions[0].LaunchTemplateName' --output text)
+            echo "::set-output name=asg_name::$ASG_NAME"
+  
+      - name: Instance Refresh
+        id: instance_refresh
+        run: |
+            ASG_NAME=${{ needs.deploy.outputs.asg_name }}
+            INSTANCE_REFRESH_ID=$(aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME --preferences MinHealthyPercentage=100 --query 'InstanceRefreshId' --output text)
+            echo "::set-output name=instance_refresh_id::$INSTANCE_REFRESH_ID"
+
+      - name: Get Instance Refresh Status
+        id: instance_refresh_status
+        run: |
+            INSTANCE_REFRESH_ID=${{ needs.deploy.outputs.instance_refresh_id }}
+            INSTANCE_REFRESH_STATUS=$(aws autoscaling describe-instance-refreshes --instance-refresh-ids $INSTANCE_REFRESH_ID --query 'InstanceRefreshes[0].Status' --output text)
+            echo "::set-output name=instance_refresh_status::$INSTANCE_REFRESH_STATUS"
+  
+  wait_for_refresh:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Instance Refresh to Complete
+        id: wait_for_refresh
+        run: |
+            INSTANCE_REFRESH_ID=${{ needs.deploy.outputs.instance_refresh_id }}
+            aws autoscaling wait instance-refresh-complete --instance-refresh-id $INSTANCE_REFRESH_ID
