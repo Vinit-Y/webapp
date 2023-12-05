@@ -78,7 +78,7 @@ sudo apt install mariadb-server
 ## Importing SSL Certificate into AWS Certificate Manager (ACM):
  A guide on how to import an SSL certificate into AWS Certificate Manager using the AWS CLI.
 
-# Prerequisites
+### Prerequisites
 
 - AWS CLI installed and configured with the necessary credentials.
 - SSL certificate files:
@@ -86,7 +86,8 @@ sudo apt install mariadb-server
   - `certificate-chain.pem`: Your certificate chain file.
   - `private-key.pem`: Your private key file.
 
-# Importing the SSL Certificate
+
+### Importing the SSL Certificate
 
 1. Open a terminal window.
 
