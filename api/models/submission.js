@@ -8,10 +8,26 @@ const Submission = databaseConnection.define("Submission", {
     primaryKey: true,
     allowNull: false,
   },
+  // submissionUrl: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+
+  // },
   submissionUrl: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
+    validate: {
+      isURL: {
+        protocols: ['http', 'https'],
+        requireProtocol: true,
+      },
+      endsWithZip(value) {
+        if (!value.endsWith('.zip')) {
+          throw new Error('Submission URL must end with .zip');
+        }
+      },
+    },
+  }
 },
   {
     createdAt: "submission_date",
