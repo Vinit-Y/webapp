@@ -68,11 +68,37 @@ To copy your project to a Debian VM for testing and demo purposes, you can use t
    Change to the directory where you copied your project.
 
 4. **Install Dependencies and Start the Application**:
-  sudo apt update
+sudo apt update
 sudo apt upgrade
 sudo apt install unzip
 sudo apt install nodejs
 sudo apt install npm
 sudo apt install mariadb-server
 
+## Importing SSL Certificate into AWS Certificate Manager (ACM):
+ A guide on how to import an SSL certificate into AWS Certificate Manager using the AWS CLI.
+
+# Prerequisites
+
+- AWS CLI installed and configured with the necessary credentials.
+- SSL certificate files:
+  - `certificate.pem`: Your SSL certificate file.
+  - `certificate-chain.pem`: Your certificate chain file.
+  - `private-key.pem`: Your private key file.
+
+# Importing the SSL Certificate
+
+1. Open a terminal window.
+
+2. Run the following command to import the SSL certificate into AWS ACM:
+
+   ```bash
+   aws acm import-certificate --certificate file://certificate.pem --certificate-chain file://certificate-chain.pem --private-key file://private-key.pem
+   ```
+
+   Replace `certificate.pem`, `certificate-chain.pem`, and `private-key.pem` with the actual file names and paths on your local system.
+
+3. After running the command, the AWS ACM will import your SSL certificate. The certificate will be in the "PENDING_VALIDATION" state.
+
+4. Complete the domain validation process in the AWS Management Console or using the AWS CLI to validate the certificate for your domain.
 
