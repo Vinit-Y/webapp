@@ -86,6 +86,7 @@ sudo apt install mariadb-server
   - `certificate-chain.pem`: Your certificate chain file.
   - `private-key.pem`: Your private key file.
 
+
 ### Importing the SSL Certificate
 
 1. Open a terminal window.
