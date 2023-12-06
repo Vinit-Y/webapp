@@ -8,7 +8,7 @@ import connectionRouter from "./connection-router.js";
 export default (app) => {
   app.use("/healthz", connectionRouter);
   
-  app.use("/v1/assignments", checkHealth, authenticate, assignmentRouter);
+  app.use("/v2/assignments", checkHealth, authenticate, assignmentRouter);
 
   app.use((req, res) => {
     setResponse(req, res, 405);
